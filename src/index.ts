@@ -76,11 +76,14 @@ program
 		console.log(chalk.green("✅  validated"));
 
 		// Use fast-glob to find all JavaScript and TypeScript files
-		const all_source_file_pathes = glob.sync(["**/*.js", "**/*.d.ts"], {
-			cwd: destination_path,
-			absolute: false,
-			ignore: ["**/node_modules/**", "**/dist/**"],
-		});
+		const all_source_file_pathes = glob.sync(
+			["**/*.js", "**/*.mjs", "**/*.d.ts"],
+			{
+				cwd: destination_path,
+				absolute: false,
+				ignore: ["**/node_modules/**", "**/dist/**"],
+			},
+		);
 
 		if (all_source_file_pathes.length > 0) {
 			// Generate exports object
@@ -90,17 +93,25 @@ program
 					{ import: string; types: string }
 				>;
 
+				console.log(all_source_file_pathes);
+
 				all_source_file_pathes.forEach((file_path) => {
 					// Remove file extension
-					const file_path_without_ext = file_path.replace(/\.(js|d.ts)$/, "");
+					const file_key = file_path
+						.replace(/\.(js|mjs|d.ts)$/, "")
+						.replace(/\/index$/, "");
 
 					// Create the export entry
-					const file_entry = all_exports[`./${file_path_without_ext}`] ?? {};
+					const file_entry = all_exports[`./${file_key}`] ?? {};
 
-					if (file_path.endsWith(".d.ts")) file_entry.types = `./${file_path}`;
-					else file_entry.import = `./${file_path}`;
+					console.log(file_path);
+					if (file_path.endsWith(".d.ts")) {
+						file_entry.types = `./${file_path}`;
+					} else {
+						file_entry.import = `./${file_path}`;
+					}
 
-					all_exports[`./${file_path_without_ext}`] = file_entry;
+					all_exports[`./${file_key}`] = file_entry;
 				});
 
 				return all_exports;
@@ -153,6 +164,7 @@ const update_package_json_exports = (
 			),
 		);
 	} catch (error) {
+		// @ts-ignore
 		console.log(chalk.red(`\nError updating package.json: ${error.message}`));
 		process.exit(1);
 	}
