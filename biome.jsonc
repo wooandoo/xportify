@@ -1,0 +1,15 @@
+// .biome.jsonc (racine)
+{
+	"$schema": "https://biomejs.dev/schemas/biome.json",
+
+	// format + lint communs
+	"formatter": { "enabled": true },
+	"linter": { "rules": { "recommended": true } },
+
+	// active l’action « organizeImports » à chaque check/format
+	"assist": {
+		"actions": {
+			"source": { "organizeImports": "on" } // tri + nettoyage auto
+		}
+	}
+}
