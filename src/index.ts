@@ -20,41 +20,41 @@ program
 
 // Define the command
 program
-	.option("-i, --input <path>", "Path to resolve to absolute")
-	.option("-d, --dist <directory>", "Destination directory", "./dist")
+	.option("-p, --project <path>", "Path to resolve to absolute")
+	.option("-d, --dist <directory>", "Relative destination directory", "./dist")
 	.option("-w, --write", "Write exports to package.json", false)
 	.action((options) => {
-		const input_path = options.input;
+		const project_path = options.project;
 
-		if (!input_path) {
+		if (!project_path) {
 			console.log(
-				chalk.red("Error: No input path provided. Use --input option."),
+				chalk.red("Error: No project path provided. Use --project option."),
 			);
 			program.help();
 			return;
 		}
 
 		// Resolve the relative path to absolute
-		const project_path = path.resolve(process.cwd(), input_path);
+		const absolute_project_path = path.resolve(process.cwd(), project_path);
 
 		// Resolve the combined path (src + input)
 		const destination_path = path.resolve(
 			process.cwd(),
-			project_path,
+			absolute_project_path,
 			options.dist,
 		);
 
-		console.log(chalk.blue("📁 Project path:"), project_path);
+		console.log(chalk.blue("📁 Project path:"), absolute_project_path);
 
 		// Check if the project directory exists
-		if (!fs.existsSync(project_path)) {
+		if (!fs.existsSync(absolute_project_path)) {
 			console.log(chalk.red("Error: Project directory does not exist."));
 			program.help();
 			process.exit(1);
 		}
 
 		// Check if the package.json file exists
-		const package_json_path = path.join(project_path, "package.json");
+		const package_json_path = path.join(absolute_project_path, "package.json");
 
 		if (!fs.existsSync(package_json_path)) {
 			console.log(chalk.red("Error: package.json file not found."));
