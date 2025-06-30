@@ -1,6 +1,6 @@
 {
 	"name": "xportify",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"license": "MIT",
 	"description": "A CLI tool that automatically generates and manages the exports field in package.json for ESM packages",
 	"keywords": [
@@ -21,7 +21,7 @@
 	"main": "dist/index.js",
 	"type": "module",
 	"bin": {
-		"xportify": "./dist/index.js"
+		"xportify": "./bin/xportify.js"
 	},
 	"scripts": {
 		"dev": "tsx src/index.ts",
