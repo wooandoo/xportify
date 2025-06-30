@@ -28,7 +28,8 @@
 		"build": "tsdown",
 		"start": "node dist/index.js",
 		"check": "biome check .",
-		"fix": "biome check . --write"
+		"fix": "biome check . --write",
+		"prepare": "pnpm run build"
 	},
 	"packageManager": "pnpm@10.12.4",
 	"devDependencies": {
