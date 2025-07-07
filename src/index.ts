@@ -1,13 +1,13 @@
+// Get package.json for version
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import chalk from "chalk";
 import { Command } from "commander";
 import { extract_exports } from "./commands/extract_exports.js";
 
-// Get package.json for version
-import { readFileSync } from "node:fs";
 const package_json = JSON.parse(
-	readFileSync(new URL("../package.json", import.meta.url), "utf8")
+	readFileSync(new URL("../package.json", import.meta.url), "utf8"),
 );
 
 // Get the current directory
@@ -26,6 +26,7 @@ program
 // Define the default command
 program
 	.option("-p, --project <path>", "Path to resolve to absolute")
+	.option("-s, --src <directory>", "Relative source directory", "./src")
 	.option("-d, --dist <directory>", "Relative destination directory", "./dist")
 	.option("-w, --write", "Write exports to package.json", false)
 	.action(extract_exports(program));

@@ -1,6 +1,6 @@
 {
 	"name": "xportify",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"license": "MIT",
 	"description": "A CLI tool that automatically generates and manages the exports field in package.json for ESM packages",
 	"keywords": [
@@ -29,14 +29,17 @@
 		"start": "node dist/index.js",
 		"check": "biome check .",
 		"fix": "biome check . --write",
-		"prepare": "pnpm run build"
+		"prepare": "pnpm run build",
+		"test": "vitest run",
+		"test:watch": "vitest"
 	},
 	"packageManager": "pnpm@10.12.4",
 	"devDependencies": {
 		"@biomejs/biome": "^2.0.6",
 		"tsdown": "^0.12.9",
 		"tsx": "^4.20.3",
-		"typescript": "^5.8.3"
+		"typescript": "^5.8.3",
+		"vitest": "^1.2.1"
 	},
 	"dependencies": {
 		"@types/node": "^24.0.7",
