@@ -1,6 +1,6 @@
 {
 	"name": "xportify",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"license": "MIT",
 	"description": "A CLI tool that automatically generates and manages the exports field in package.json for ESM packages",
 	"keywords": [
