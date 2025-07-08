@@ -217,7 +217,7 @@ const generate_exports_object = (
 						if (file_import !== undefined || file_types !== undefined) {
 							const export_path =
 								relative_file_path === "index.ts"
-									? "./"
+									? "."
 									: relative_file_path.endsWith("index.ts")
 										? `./${path.dirname(relative_file_path)}`
 										: // remove extension
