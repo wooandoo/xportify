@@ -47,9 +47,10 @@ export function extract_exports(program: Command) {
 			{
 				cwd: source_path,
 				absolute: false,
-				ignore: ["**/node_modules/**", "**/dist/**"],
+				ignore: ["**/node_modules/**", "**/dist/**", "**/*.stories.*", "**/stories/**", "**/vite-env.d.ts", "**/*.css"],
 			},
-		);
+		).filter(file => !file.includes('stories'));
+
 
 		if (all_source_file_pathes.length === 0) {
 			console.log(
@@ -200,45 +201,51 @@ const generate_exports_object = (
 ) => {
 	return all_source_file_pathes.reduce(
 		(exports, relative_file_path) => {
-			// check if the file is a TypeScript file and if it has a file in the destination repository
-			if (relative_file_path.endsWith(".ts")) {
-				return all_source_file_pathes.reduce(
-					(exports, relative_file_path) => {
-						const file_import = extract_file_import_path(
-							relative_file_path,
-							destination_path,
-						);
-
-						const file_types = extract_file_types_path(
-							relative_file_path,
-							destination_path,
-						);
-
-						if (file_import !== undefined || file_types !== undefined) {
-							const export_path =
-								relative_file_path === "index.ts"
-									? "."
-									: relative_file_path.endsWith("index.ts")
-										? `./${path.dirname(relative_file_path)}`
-										: // remove extension
-											`./${path.join(
-												path.dirname(relative_file_path),
-												path.basename(
-													relative_file_path,
-													path.extname(relative_file_path),
-												),
-											)}`;
-
-							exports[export_path] = {
-								types: file_types,
-								import: file_import,
-							};
-						}
-
-						return exports;
-					},
-					{} as Record<string, { types?: string; import?: string }>,
+			// check if the file is a TypeScript file
+			if (relative_file_path.endsWith(".ts") || relative_file_path.endsWith(".tsx")) {
+				const file_import = extract_file_import_path(
+					relative_file_path,
+					destination_path,
 				);
+
+				const file_types = extract_file_types_path(
+					relative_file_path,
+					destination_path,
+				);
+
+				// Only export files that have at least one compiled output (.js or .d.ts)
+				if (file_import !== undefined || file_types !== undefined) {
+					// For files that only have .d.ts but no .js, we probably don't want to export them
+					// unless they're specifically index files (which should be exported as entry points)
+					const is_index_file = relative_file_path.endsWith("/index.ts") || 
+										  relative_file_path.endsWith("/index.tsx") || 
+										  relative_file_path === "index.ts" || 
+										  relative_file_path === "index.tsx";
+					
+					// Skip files that only have types but no import, unless they're index files
+					if (!file_import && !is_index_file) {
+						return exports;
+					}
+					// Generate the export path
+					let export_path: string;
+					if (relative_file_path === "index.ts" || relative_file_path === "index.tsx") {
+						// Root index.ts/tsx
+						export_path = ".";
+					} else if (relative_file_path.endsWith("/index.ts") || relative_file_path.endsWith("/index.tsx")) {
+						// Subdirectory index.ts/tsx files
+						export_path = `./${path.dirname(relative_file_path)}`;
+					} else {
+						// Regular files - remove the extension
+						const dir = path.dirname(relative_file_path);
+						const base = path.basename(relative_file_path, path.extname(relative_file_path));
+						export_path = dir === "." ? `./${base}` : `./${dir}/${base}`;
+					}
+
+					exports[export_path] = {
+						types: file_types,
+						import: file_import,
+					};
+				}
 			}
 
 			return exports;
