@@ -167,7 +167,7 @@ describe("generate_exports_object", () => {
 
 			expect(result).toEqual({
 				"./styles.css": {
-					style: "./dist/styles.css",
+					import: "./dist/styles.css",
 				},
 			});
 		});
@@ -183,7 +183,7 @@ describe("generate_exports_object", () => {
 
 			expect(result).toEqual({
 				"./theme/dark.css": {
-					style: "./dist/theme/dark.css",
+					import: "./dist/theme/dark.css",
 				},
 			});
 		});
@@ -207,7 +207,9 @@ describe("generate_exports_object", () => {
 				"./components/button": {
 					import: "./dist/components/button.js",
 					types: "./dist/components/button.d.ts",
-					style: "./dist/components/button.css",
+				},
+				"./components/button.css": {
+					import: "./dist/components/button.css",
 				},
 			});
 		});
@@ -223,7 +225,7 @@ describe("generate_exports_object", () => {
 
 			expect(result).toEqual({
 				"./index.css": {
-					style: "./dist/index.css",
+					import: "./dist/index.css",
 				},
 			});
 		});
@@ -349,16 +351,18 @@ describe("generate_exports_object", () => {
 				"./components/Button": {
 					import: "./dist/components/Button.js",
 					types: "./dist/components/Button.d.ts",
-					style: "./dist/components/Button.css",
 				},
 				"./styles.css": {
-					style: "./dist/styles.css",
+					import: "./dist/styles.css",
+				},
+				"./components/Button.css": {
+					import: "./dist/components/Button.css",
 				},
 				"./theme/dark.css": {
-					style: "./dist/theme/dark.css",
+					import: "./dist/theme/dark.css",
 				},
 				"./theme/light.css": {
-					style: "./dist/theme/light.css",
+					import: "./dist/theme/light.css",
 				},
 			});
 		});

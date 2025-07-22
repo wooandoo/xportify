@@ -15,14 +15,16 @@
 		},
 		"./components/button": {
 			"types": "./dist/components/button.d.ts",
-			"import": "./dist/components/button.js",
-			"style": "./dist/components/button.css"
+			"import": "./dist/components/button.js"
 		},
 		"./styles.css": {
-			"style": "./dist/styles.css"
+			"import": "./dist/styles.css"
+		},
+		"./components/button.css": {
+			"import": "./dist/components/button.css"
 		},
 		"./theme/dark.css": {
-			"style": "./dist/theme/dark.css"
+			"import": "./dist/theme/dark.css"
 		}
 	}
 }

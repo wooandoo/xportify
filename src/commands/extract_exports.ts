@@ -205,7 +205,6 @@ function validate_destination_path(
 type ExportEntry = {
 	import?: string;
 	types?: string;
-	style?: string;
 };
 
 type ExportMap = Record<string, ExportEntry>;
@@ -330,7 +329,7 @@ const process_typescript_file = (
  * @returns Export map for package.json exports field
  * @example
  * generate_exports_object(['index.ts'], ['styles.css'], './dist')
- * // { '.': { import: './dist/index.js', types: './dist/index.d.ts' }, './styles.css': { style: './dist/styles.css' } }
+ * // { '.': { import: './dist/index.js', types: './dist/index.d.ts' }, './styles.css': { import: './dist/styles.css' } }
  */
 const generate_exports_object = (
 	source_file_paths: string[],
@@ -358,18 +357,8 @@ const generate_exports_object = (
 		const result = process_css_file(css_path, destination_path);
 
 		if (result !== null) {
-			// Check if there's already an export with the same base name (without .css extension)
-			const base_export_path = result.export_path.replace(/\.css$/, "");
-			if (exports[base_export_path]) {
-				// Merge CSS with existing TS/JS export
-				exports[base_export_path] = {
-					...exports[base_export_path],
-					...result.entry,
-				};
-			} else {
-				// Create standalone CSS export
-				exports[result.export_path] = result.entry;
-			}
+			// CSS files always get their own export with .css extension
+			exports[result.export_path] = result.entry;
 		}
 	}
 
@@ -452,7 +441,7 @@ const find_compiled_types_file = (
  * @returns Export entry or null if file should not be exported
  * @example
  * process_css_file('styles/main.css', './dist')
- * // { export_path: './styles/main.css', entry: { style: './dist/styles/main.css' } }
+ * // { export_path: './styles/main.css', entry: { import: './dist/styles/main.css' } }
  */
 const process_css_file = (
 	file_path: string,
@@ -466,7 +455,7 @@ const process_css_file = (
 		file_path === "index.css" ? "./index.css" : `./${file_path}`;
 
 	const export_entry: ExportEntry = {
-		style: style_path,
+		import: style_path,
 	};
 
 	return { export_path, entry: export_entry };
