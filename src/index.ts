@@ -29,7 +29,7 @@ program
 	.option("-s, --src <directory>", "Relative source directory", "./src")
 	.option("-d, --dist <directory>", "Relative destination directory", "./dist")
 	.option("-w, --write", "Write exports to package.json", false)
-	.action(extract_exports(program));
+	.action(extract_exports);
 
 // Define version command
 program.command("version").action(() => {

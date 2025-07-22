@@ -1,0 +1,48 @@
+/* Dark theme styles */
+:root.dark-theme {
+	--bg-primary: #1a1a1a;
+	--bg-secondary: #2d2d2d;
+	--text-primary: #ffffff;
+	--text-secondary: #b0b0b0;
+	--accent: #4db8ff;
+	--border: #404040;
+}
+
+.dark-theme body {
+	background-color: var(--bg-primary);
+	color: var(--text-primary);
+}
+
+.dark-theme .container {
+	color: var(--text-primary);
+}
+
+.dark-theme .header {
+	background-color: var(--bg-secondary);
+	border: 1px solid var(--border);
+}
+
+.dark-theme .card {
+	background-color: var(--bg-secondary);
+	border: 1px solid var(--border);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .button-primary {
+	background-color: var(--accent);
+	color: var(--bg-primary);
+}
+
+.dark-theme .button-primary:hover {
+	background-color: #66c2ff;
+}
+
+.dark-theme .button-secondary {
+	background-color: var(--bg-secondary);
+	color: var(--text-primary);
+	border: 1px solid var(--border);
+}
+
+.dark-theme .button-secondary:hover {
+	background-color: #3d3d3d;
+}

@@ -57,6 +57,49 @@ When developing CLI features:
 4. All error messages should use chalk for colored output
 5. Validation errors should be descriptive and actionable
 
+## Common coding guidelines
+
+### Type & Naming Conventions
+
+- Descriptive property names; **no abbreviations**.
+- Strict typing using explicit `type` aliases – **never** `interface`.
+- `snake_case` for variables & functions; `UPPER_SNAKE_CASE` for constants.
+
+### Functional Paradigm
+
+- Functions only, no classes or `this`.
+- Use `function` keyword only when defining functions at the root level of a file. For all other cases (inside functions, as object properties, as parameters, etc.), always use arrow functions.
+- Single‑responsibility files.
+- Pure logic; side‑effects at the edges.
+
+### Documentation
+
+- Every exported symbol has a JSDoc block with an `@example` snippet.
+
+### Testing
+
+- **Vitest** for regression guard on interaction/state (not full coverage).
+- Tests must reside in the same folder as the file containing the tested elements.
+- **IMPORTANT**: Always update tests after modifying code to ensure they reflect the current implementation.
+
+### Logging
+
+- **Pino**, structured JSON; include `timestamp`, `level`, `component`,
+  `action`, optional `correlationId`.
+- Context as objects; never concatenate strings.
+- Emoji prefixes (📝, ✅, ❌, ⚠️, 🔍).
+- Use `logger.error(err, { component, action, meta })` for stack traces.
+- Never log sensitive data (passwords, tokens, personal identifiers).
+- Logs must aid both usage analytics and remote debugging.
+
+### Error handling
+
+- Errors are logged once with **Pino** at `error` level (no duplicates) with context.
+
+### Performance
+
+- Prefer immutable data; avoid blocking I/O in handlers.
+
 ## Testing New Features
 
 Currently, the test directory is empty. When adding tests:
@@ -89,6 +132,7 @@ When modifying the export generation logic:
 2. Test with a local project using `pnpm dev -p <project-path>`
 3. Verify generated exports format matches ESM subpath exports specification
 4. Ensure both `.js` and `.d.ts` files are properly paired
+5. Update tests in `src/extract_exports.test.ts` to reflect any changes in behavior
 
 When adding new CLI options:
 1. Update command definition in `src/index.ts`
